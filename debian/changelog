@@ -1,3 +1,9 @@
+journalbeat (0.1.0-2~xenial1~clustree1) xenial; urgency=medium
+
+  * Fix user.
+
+ -- Sebastien Badia <seb@sebian.fr>  Mon, 08 Aug 2016 17:14:29 +0200
+
 journalbeat (0.1.0-1~xenial1~clustree1) xenial; urgency=low
 
   * Initial import.

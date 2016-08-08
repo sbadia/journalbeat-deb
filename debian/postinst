@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+    configure)
+
+      # Create journalbeat user
+      if ! getent passwd journalbeat > /dev/null 2>&1
+      then
+        adduser --system --group --quiet \
+          --no-create-home --home /nonexistent \
+          --shell /usr/sbin/nologin \
+          --gecos "journalbeat logs to elasticsearch" journalbeat
+      fi
+
+      touch /etc/journalbeat.yml
+      chown -R journalbeat: /etc/journalbeat.yml
+
+    ;;
+esac
+
+#DEBHELPER#
