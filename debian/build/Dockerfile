@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     GIT_BUILDPACKAGE_OPTIONS=
 
 RUN apt-get update && \
-    apt-get install -y equivs ubuntu-dev-tools git-buildpackage software-properties-common && \
+    apt-get install -y tree equivs ubuntu-dev-tools git-buildpackage software-properties-common && \
     apt-get update
 
 COPY build.sh /build.sh
