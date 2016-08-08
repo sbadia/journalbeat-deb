@@ -1,0 +1,17 @@
+[Unit]
+Description=Journalbeat journal to beat
+After=network.target
+Documentation=man:journalbeat(1)
+
+[Service]
+Type=simple
+Environment=GOMAXPROCS=2
+EnvironmentFile=/etc/default/journalbeat
+ExecStart=/usr/bin/journalbeat -c /etc/journalbeat/journalbeat.yml -path.data /var/lib/journalbeat/ -path.home /var/lib/journalbeat/ $JOURNALBEAT_FLAGS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=infinity
+
+[Install]
+WantedBy=multi-user.target

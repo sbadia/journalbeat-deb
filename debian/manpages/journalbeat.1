@@ -1,0 +1,88 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "JOURNALBEAT" "1" "2016-08-08" "" ""
+.
+.SH "NAME"
+\fBjournalbeat\fR \- Log shipper from systemd/journald to Logstash/Elasticsearch
+.
+.SH "SYNOPSIS"
+\fBjournalbeat\fR [\-version] [\-\-help] [\fIargs\fR]
+.
+.SH "DESCRIPTION"
+Journalbeat is the Beat used for log shipping from systemd/journald based Linux systems\. It follows the system journal very much like journalctl \-f and sends the data to Logstash/Elasticsearch (or whatever you configured for your beat)\.
+.
+.P
+Journalbeat is targeting pure systemd distributions like CoreOS, Atomic Host, or others\. There are no intentions to add support for older systems that do not use journald\.
+.
+.SH "USECASES"
+Besides from the obvious use case (log shipping) the goal of this project is also to provide a common source for more advanced topics like:
+.
+.IP "\(bu" 4
+FIM (File Integrity Monitoring)
+.
+.IP "\(bu" 4
+SIEM
+.
+.IP "\(bu" 4
+Audit Logs / Monitoring
+.
+.IP "" 0
+.
+.P
+This is all possible because of the tight integration of the Linux audit events into journald\. That said journalbeat can only provide the data source for these more advanced use cases\. We need to develop additional pieces for monitoring and alerting \- as well as hopefully a standardized Kibana dashboard to cover these features\.
+.
+.SH "OPTIONS"
+.
+.IP "\(bu" 4
+\fB\-N\fR Disable actual publishing for testing
+.
+.IP "\(bu" 4
+\fB\-c string\fR Configuration file (default "/root/journalbeat\.yml")
+.
+.IP "\(bu" 4
+\fB\-configtest\fR Test configuration and exit\.
+.
+.IP "\(bu" 4
+\fB\-cpuprofile string\fR Write cpu profile to file
+.
+.IP "\(bu" 4
+\fB\-d string\fR Enable certain debug selectors
+.
+.IP "\(bu" 4
+\fB\-e\fR Log to stderr and disable syslog/file output
+.
+.IP "\(bu" 4
+\fB\-httpprof string\fR Start pprof http server
+.
+.IP "\(bu" 4
+\fB\-memprofile string\fR Write memory profile to this file
+.
+.IP "\(bu" 4
+\fB\-path\.config string\fR Configuration path
+.
+.IP "\(bu" 4
+\fB\-path\.data string\fR Data path
+.
+.IP "\(bu" 4
+\fB\-path\.home string\fR Home path
+.
+.IP "\(bu" 4
+\fB\-path\.logs string\fR Logs path
+.
+.IP "\(bu" 4
+\fB\-h\fR, \fB\-\-help\fR: Show this help message and exit
+.
+.IP "\(bu" 4
+\fB\-v\fR Log at INFO level
+.
+.IP "\(bu" 4
+\fB\-version\fR Print the version and exit
+.
+.IP "" 0
+.
+.SH "COPYRIGHT"
+journalbeat is subject to the terms of the Apache2\.0 License (Apache\-2\.0)
+.
+.SH "SEE ALSO"
+journalbeat online documentation is available on this website https://github\.com/mheese/journalbeat

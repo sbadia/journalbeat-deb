@@ -1,0 +1,87 @@
+journalbeat(1) -- Log shipper from systemd/journald to Logstash/Elasticsearch
+=============================================================================
+
+## SYNOPSIS
+
+`journalbeat` [-version] [--help] [<args>]
+
+## DESCRIPTION
+
+Journalbeat is the Beat used for log shipping from systemd/journald based Linux
+systems. It follows the system journal very much like journalctl -f and sends
+the data to Logstash/Elasticsearch (or whatever you configured for your beat).
+
+Journalbeat is targeting pure systemd distributions like CoreOS, Atomic Host,
+or others. There are no intentions to add support for older systems that do not
+use journald.
+
+## USECASES
+
+Besides from the obvious use case (log shipping) the goal of this project is
+also to provide a common source for more advanced topics like:
+
+* FIM (File Integrity Monitoring)
+* SIEM
+* Audit Logs / Monitoring
+
+This is all possible because of the tight integration of the Linux audit events
+into journald. That said journalbeat can only provide the data source for these
+more advanced use cases. We need to develop additional pieces for monitoring
+and alerting - as well as hopefully a standardized Kibana dashboard to cover
+these features.
+
+## OPTIONS
+
+* `-N`
+  Disable actual publishing for testing
+
+* `-c string`
+  Configuration file (default "/root/journalbeat.yml")
+
+* `-configtest`
+  Test configuration and exit.
+
+* `-cpuprofile string`
+  Write cpu profile to file
+
+* `-d string`
+  Enable certain debug selectors
+
+* `-e`
+  Log to stderr and disable syslog/file output
+
+* `-httpprof string`
+  Start pprof http server
+
+* `-memprofile string`
+  Write memory profile to this file
+
+* `-path.config string`
+  Configuration path
+
+* `-path.data string`
+  Data path
+
+* `-path.home string`
+  Home path
+
+* `-path.logs string`
+  Logs path
+
+
+* `-h`, `--help`:
+  Show this help message and exit
+
+* `-v`
+  Log at INFO level
+
+* `-version`
+  Print the version and exit
+
+## COPYRIGHT
+
+journalbeat is subject to the terms of the Apache2.0 License (Apache-2.0)
+
+## SEE ALSO
+
+journalbeat online documentation is available on this website https://github.com/mheese/journalbeat
