@@ -1,3 +1,10 @@
+journalbeat (5.1.2-1~xenial1~clustree1) xenial; urgency=medium
+
+  * New upstream release (5.1.2)
+  * Fix Debian watch file
+
+ -- Sebastien Badia <sbadia@debian.org>  Fri, 17 Mar 2017 16:10:56 +0100
+
 journalbeat (0.1.0-2~xenial1~clustree1) xenial; urgency=medium
 
   * Fix user.
