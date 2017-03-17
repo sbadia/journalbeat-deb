@@ -1,20 +1,23 @@
 Source: journalbeat
 Section: utils
 Priority: optional
-Maintainer: Sebastien Badia <seb@sebian.fr>
+Maintainer: Sebastien Badia <sbadia@debian.org>
 Homepage: https://github.com/mheese/journalbeat
 Vcs-Git: https://github.com/sbadia/journalbeat-deb
 Vcs-Browser: https://github.com/sbadia/journalbeat-deb
 Standards-Version: 3.9.8
-Build-Depends: debhelper (>= 9),
+Build-Depends: ca-certificates,
+               curl,
+               debhelper (>= 9),
                dh-systemd,
                git,
                golang-go (>= 2:1.6) | golang-1.6-go,
-               libsystemd-dev
+               libsystemd-dev,
+               pkg-config
 
 Package: journalbeat
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: adduser, ${misc:Depends}, ${shlibs:Depends}
 Description: Log shipper from systemd/journald to Logstash/Elasticsearch
  Journalbeat is the Beat used for log shipping from systemd/journald based Linux
  systems. It follows the system journal very much like journalctl -f and sends
