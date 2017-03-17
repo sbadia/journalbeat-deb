@@ -1,1 +1,2 @@
 usr/bin/journalbeat
+etc/journalbeat.yml /etc
