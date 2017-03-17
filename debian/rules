@@ -4,22 +4,14 @@
 #export DH_VERBOSE=1
 
 override_dh_auto_clean:
-	rm -rf go etc
+	rm -rf go
 
 override_dh_auto_build:
-	mkdir -p /go/pkg /go/bin /go/src $(CURDIR)/usr/bin/ $(CURDIR)/.git
-	cd /go && PATH=$$PATH:/usr/lib/go-1.6/bin GOPATH=/go \
+	mkdir -p $(CURDIR)/go/pkg $(CURDIR)/go/bin $(CURDIR)/go/src $(CURDIR)/usr/bin/ $(CURDIR)/.git
+	cd $(CURDIR)/go && PATH=$$PATH:/usr/lib/go-1.6/bin GOPATH=$(CURDIR)/go \
 		go get github.com/mheese/journalbeat
-	cp /go/bin/* $(CURDIR)/usr/bin/
+	cp $(CURDIR)/go/bin/* $(CURDIR)/usr/bin/
 	cd $(CURDIR)
-	#mkdir -p /go/src/github.com/mheese/ /go/{pkg,bin}
-	#ln -sf $(CURDIR) /go/src/github.com/mheese/journalbeat
-	#cd /go/src/github.com/mheese/journalbeat
-	#	PATH=$$PATH:/usr/lib/go-1.6/bin GOPATH=/go \
-	#	tree && go build \
-	#	-ldflags "-X main.GitCommit=$${GIT_COMMIT} -X main.GitDescribe=$${GIT_DESCRIBE}" \
-	#	-o /go/bin/journalbeat
-	#cd $(CURDIR)
 
 override_dh_auto_test:
 
