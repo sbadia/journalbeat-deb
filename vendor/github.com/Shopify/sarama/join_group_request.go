@@ -85,6 +85,10 @@ func (r *JoinGroupRequest) version() int16 {
 	return 0
 }
 
+func (r *JoinGroupRequest) requiredVersion() KafkaVersion {
+	return V0_9_0_0
+}
+
 func (r *JoinGroupRequest) AddGroupProtocol(name string, metadata []byte) {
 	if r.GroupProtocols == nil {
 		r.GroupProtocols = make(map[string][]byte)
@@ -94,7 +98,7 @@ func (r *JoinGroupRequest) AddGroupProtocol(name string, metadata []byte) {
 }
 
 func (r *JoinGroupRequest) AddGroupProtocolMetadata(name string, metadata *ConsumerGroupMemberMetadata) error {
-	bin, err := encode(metadata)
+	bin, err := encode(metadata, nil)
 	if err != nil {
 		return err
 	}
