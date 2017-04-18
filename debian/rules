@@ -7,11 +7,14 @@ override_dh_auto_clean:
 	rm -rf go
 
 override_dh_auto_build:
-	mkdir -p $(CURDIR)/go/pkg $(CURDIR)/go/bin $(CURDIR)/go/src $(CURDIR)/usr/bin/ $(CURDIR)/.git
-	cd $(CURDIR)/go && PATH=$$PATH:/usr/lib/go-1.6/bin GOPATH=$(CURDIR)/go \
-		go get github.com/mheese/journalbeat
-	cp $(CURDIR)/go/bin/* $(CURDIR)/usr/bin/
-	cd $(CURDIR)
+	mkdir -p go/src/github.com/mheese go/pkg usr/bin
+	ln -sf $(CURDIR) go/src/github.com/mheese/journalbeat
+	PATH=$$PATH:/usr/lib/go-1.8/bin GOPATH=$(CURDIR)/go \
+		go build \
+		-ldflags "-s -w -X $${GIT_IMPORT}.GitCommit=$${GIT_COMMIT} -X $${GIT_IMPORT}.GitDescribe=$${GIT_DESCRIBE}" \
+		-o usr/bin/journalbeat \
+		-tags "$${BUILD_TAGS}" \
+		github.com/mheese/journalbeat
 
 override_dh_auto_test:
 
