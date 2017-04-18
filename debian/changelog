@@ -1,3 +1,11 @@
+journalbeat (5.1.2-2~xenial1~clustree1) xenial; urgency=medium
+
+  * Fix go panic (panic: interface conversion: interface is string, not
+    common.Time)
+  * Bump to go version 1.8 from Ubuntu PPA
+
+ -- Sebastien Badia <sbadia@debian.org>  Tue, 18 Apr 2017 21:27:18 +0200
+
 journalbeat (5.1.2-1~xenial1~clustree1) xenial; urgency=medium
 
   * New upstream release (5.1.2)
