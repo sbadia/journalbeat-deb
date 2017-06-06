@@ -54,6 +54,7 @@ runcontainer:
 		-v ~/.devscripts:/root/.devscripts \
 		-v ~/.gnupg:/root/.gnupg \
 		-v $(PKGDIR):/opt/journalbeat-deb:ro \
+		-v $(PKGDIR)/.git:/opt/journalbeat-deb/.git:rw \
 		-v /tmp/journalbeat-deb:/tmp/journalbeat-deb \
 		$(CONTAINER_OPTS) \
 		ubuntu:$(DISTRO)-journalbeat-deb $(CONTAINER_CMD)
