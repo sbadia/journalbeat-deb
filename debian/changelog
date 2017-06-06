@@ -1,3 +1,9 @@
+journalbeat (5.4.1-1~xenial1~clustree1) xenial; urgency=medium
+
+  * New upstream release (5.4.1)
+
+ -- Sebastien Badia <sbadia@debian.org>  Tue, 06 Jun 2017 15:52:58 +0200
+
 journalbeat (5.1.2-2~xenial1~clustree1) xenial; urgency=medium
 
   * Fix go panic (panic: interface conversion: interface is string, not
