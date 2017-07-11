@@ -1,3 +1,9 @@
+journalbeat (5.5.0-1~xenial1~clustree1) xenial; urgency=medium
+
+  * New upstream release (5.5.0)
+
+ -- Sebastien Badia <sbadia@debian.org>  Tue, 11 Jul 2017 17:02:04 +0200
+
 journalbeat (5.4.1-1~xenial1~clustree1) xenial; urgency=medium
 
   * New upstream release (5.4.1)
