@@ -15,8 +15,10 @@
 package beater
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"sync"
 	"time"
 
@@ -55,8 +57,29 @@ func (jb *Journalbeat) initJournal() error {
 	}
 
 	// connect to the Systemd Journal
-	if jb.journal, err = sdjournal.NewJournal(); err != nil {
-		return err
+	switch len(jb.config.JournalPaths) {
+	case 0:
+		if jb.journal, err = sdjournal.NewJournal(); err != nil {
+			return err
+		}
+	case 1:
+		fi, err := os.Stat(jb.config.JournalPaths[0])
+		if err != nil {
+			return err
+		}
+		if fi.IsDir() {
+			if jb.journal, err = sdjournal.NewJournalFromDir(jb.config.JournalPaths[0]); err != nil {
+				return err
+			}
+		} else {
+			if jb.journal, err = sdjournal.NewJournalFromFiles(jb.config.JournalPaths...); err != nil {
+				return err
+			}
+		}
+	default:
+		if jb.journal, err = sdjournal.NewJournalFromFiles(jb.config.JournalPaths...); err != nil {
+			return err
+		}
 	}
 
 	// add specific units to monitor if any
@@ -95,6 +118,26 @@ func (jb *Journalbeat) initJournal() error {
 
 	if err != nil {
 		return fmt.Errorf("Seeking to a good position in journal failed: %v", err)
+	}
+
+	return nil
+}
+
+func (jb *Journalbeat) publishPending() error {
+	pending := map[string]common.MapStr{}
+	file, err := os.Open(jb.config.PendingQueue.File)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if err = json.NewDecoder(file).Decode(&pending); err != nil {
+		return err
+	}
+
+	logp.Info("Loaded %d events, trying to publish", len(pending))
+	for cursor, event := range pending {
+		jb.client.PublishEvent(event, publisher.Signal(&eventSignal{&eventReference{cursor, event}, jb.completed}), publisher.Guaranteed)
 	}
 
 	return nil
@@ -143,6 +186,11 @@ func (jb *Journalbeat) Run(b *beat.Beat) error {
 		go jb.writeCursorLoop()
 	}
 
+	// load the previously saved queue of unsent events and try to publish them if any
+	if err := jb.publishPending(); err != nil {
+		logp.Warn("could not read the pending queue: %s", err)
+	}
+
 	for rawEvent := range journal.Follow(jb.journal, jb.done) {
 		//convert sdjournal.JournalEntry to common.MapStr
 		event := MapStrFromJournalEntry(
@@ -151,9 +199,9 @@ func (jb *Journalbeat) Run(b *beat.Beat) error {
 			jb.config.ConvertToNumbers,
 			jb.config.MoveMetadataLocation)
 
-		// TODO: type and input_type should be derived from the system journal
-		event["type"] = jb.config.DefaultType
-		event["input_type"] = jb.config.DefaultType
+		if _, ok := event["type"].(string); !ok {
+			event["type"] = jb.config.DefaultType
+		}
 		event["@timestamp"] = common.Time(time.Unix(0, int64(rawEvent.RealtimeTimestamp)*1000))
 		// add _REALTIME_TIMESTAMP until https://github.com/elastic/elasticsearch/issues/12829 is closed
 		event["@realtime_timestamp"] = int64(rawEvent.RealtimeTimestamp)
