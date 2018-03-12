@@ -87,6 +87,28 @@ func (jb *Journalbeat) initJournal() error {
 		return err
 	}
 
+	// add specific patterns to monitor if any
+	for _, pattern := range jb.config.MatchPatterns {
+		err = jb.journal.AddMatch(pattern)
+		if err == nil {
+			err = jb.journal.AddDisjunction()
+		}
+
+		if err != nil {
+			return fmt.Errorf("Filtering pattern %s failed: %v", pattern, err)
+		}
+	}
+
+	// add kernel logs
+	if err = jb.addKernel(); err != nil {
+		return err
+	}
+
+	// add syslog identifiers to monitor if any
+	if err = jb.addSyslogIdentifiers(); err != nil {
+		return err
+	}
+
 	// seek position
 	position := jb.config.SeekPosition
 	// try seekToCursor first, if that is requested
@@ -121,6 +143,23 @@ func (jb *Journalbeat) initJournal() error {
 	return nil
 }
 
+// Add syslog identifiers to monitor
+func (jb *Journalbeat) addSyslogIdentifiers() error {
+	var err error
+
+	for _, identifier := range jb.config.Identifiers {
+		if err = jb.journal.AddMatch(sdjournal.SD_JOURNAL_FIELD_SYSLOG_IDENTIFIER + "=" + identifier); err != nil {
+			return fmt.Errorf("Filtering syslog identifier %s failed: %v", identifier, err)
+		}
+
+		if err = jb.journal.AddDisjunction(); err != nil {
+			return fmt.Errorf("Filtering syslog identifier %s failed: %v", identifier, err)
+		}
+	}
+
+	return nil
+}
+
 func (jb *Journalbeat) publishPending() error {
 	refs := []*eventReference{}
 	pending := map[string]common.MapStr{}
@@ -136,6 +175,9 @@ func (jb *Journalbeat) publishPending() error {
 
 	logp.Info("Loaded %d events, trying to publish", len(pending))
 	for cursor, event := range pending {
+		// We need to convert the timestamp back to the correct type before trying to publish
+		timestamp, _ := time.Parse(time.RFC3339, event["@timestamp"].(string))
+		event["@timestamp"] = common.Time(timestamp)
 		ref := &eventReference{cursor, event}
 		jb.pending <- ref
 		refs = append(refs, ref)
