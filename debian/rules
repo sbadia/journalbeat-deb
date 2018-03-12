@@ -9,7 +9,7 @@ override_dh_auto_clean:
 override_dh_auto_build:
 	mkdir -p go/src/github.com/mheese go/pkg usr/bin
 	ln -sf $(CURDIR) go/src/github.com/mheese/journalbeat
-	PATH=$$PATH:/usr/lib/go-1.8/bin GOPATH=$(CURDIR)/go \
+	PATH=$$PATH:/usr/lib/go-1.10/bin GOPATH=$(CURDIR)/go \
 		go build \
 		-ldflags "-s -w -X $${GIT_IMPORT}.GitCommit=$${GIT_COMMIT} -X $${GIT_IMPORT}.GitDescribe=$${GIT_DESCRIBE}" \
 		-o usr/bin/journalbeat \

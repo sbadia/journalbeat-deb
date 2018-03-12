@@ -9,9 +9,8 @@ Standards-Version: 3.9.8
 Build-Depends: ca-certificates,
                curl,
                debhelper (>= 9),
-               dh-systemd,
                git,
-               golang-go (>= 2:1.8) | golang-1.8,
+               golang-go (>= 2:1.10) | golang-1.10,
                libsystemd-dev,
                pkg-config
 
