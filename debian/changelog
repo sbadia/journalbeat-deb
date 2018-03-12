@@ -1,3 +1,10 @@
+journalbeat (5.6.8-1~xenial1~clustree1) xenial; urgency=medium
+
+  * New upstream version 5.6.8
+  * d/control: Bump go B-D to 1.10
+
+ -- Sebastien Badia <sbadia@debian.org>  Mon, 12 Mar 2018 09:29:11 +0100
+
 journalbeat (5.6.0-1~xenial1~clustree1) xenial; urgency=medium
 
   * New upstream release (5.6.0)
